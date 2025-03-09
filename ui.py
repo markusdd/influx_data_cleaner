@@ -78,7 +78,7 @@ class InfluxDataCleaner:
 
         # Initialize style and set initial theme
         if "ttkbootstrap" in sys.modules:
-            self.style = ttk.Style(theme="darkly")  # Default to 'darkly'
+            self.style = ttk.Style()  # Default to 'darkly'
             self.available_themes = list(self.style.theme_names())
         else:
             self.style = ttk.Style()  # Use classic ttk style

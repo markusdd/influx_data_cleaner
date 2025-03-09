@@ -121,7 +121,12 @@ jobs:
 
     - name: Fix app bundle permissions
       run: |
-        chmod +x artifacts/influx_data_cleaner-macos/influx_data_cleaner.app/Contents/MacOS/influx_data_cleaner
+        chmod +x artifacts/influx_data_cleaner-macos/Contents/MacOS/influx_data_cleaner
+
+    - name: Debug permissions after fix
+      run: |
+        find artifacts/influx_data_cleaner-macos -type f -ls
+      continue-on-error: true
 
     - name: Organize files into platform folders
       run: |

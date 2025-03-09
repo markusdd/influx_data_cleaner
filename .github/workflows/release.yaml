@@ -81,9 +81,39 @@ jobs:
         python3 -m pip install --upgrade pip
         pip3 install pyinstaller ttkbootstrap platformdirs influxdb darkdetect
 
+    - name: Debug Tcl/Tk environment
+      run: |
+        tclsh << 'EOF'
+          puts [info tclversion]
+          puts $tcl_library
+          puts $auto_path
+        EOF
+        find /usr -name "msgcat*" 2>/dev/null
+
     - name: Verify Tcl/Tk msgcat availability
       run: |
-        tclsh -c "package require msgcat; puts [package present msgcat]"
+        tclsh << 'EOF'
+          catch {
+            package require msgcat
+            puts [package present msgcat]
+          } result
+          if {$result != ""} {
+            puts stderr "Error loading msgcat: $result"
+            exit 1
+          }
+        EOF
+
+    - name: Set Tcl/Tk library path
+      run: |
+        MSG_CAT_PATH=$(find /usr -name "msgcat*" -type d 2>/dev/null | grep "tcl8.6" | head -n 1)
+        if [ -n "$MSG_CAT_PATH" ]; then
+          export TCLLIBPATH=$(dirname "$MSG_CAT_PATH")
+          echo "TCLLIBPATH=$TCLLIBPATH" >> $GITHUB_ENV
+          echo "Set TCLLIBPATH to $TCLLIBPATH"
+        else
+          echo "msgcat not found on system"
+          exit 1
+        fi
 
     - name: Build with PyInstaller
       run: |

@@ -3,11 +3,12 @@ FROM fedora:40
 # Avoid interactive prompts during installation
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install system dependencies including Python and Tcl/Tk
+# Install system dependencies including Python, Tcl/Tk, and binutils
 RUN dnf install -y \
     python3 \
     python3-pip \
     python3-tkinter \
+    binutils \
     && dnf clean all
 
 # Set working directory

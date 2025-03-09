@@ -80,7 +80,6 @@ jobs:
     - name: Debug PyInstaller logs
       run: |
         cat build/influx_data_cleaner/warn-influx_data_cleaner.txt
-        cat build/influx_data_cleaner/influx_data_cleaner.out
       working-directory: .
       continue-on-error: true
 
@@ -144,4 +143,3 @@ jobs:
           "artifacts/windows/influx_data_cleaner.exe#influx_data_cleaner_(Windows).exe" \
           "artifacts/macos/influx_data_cleaner_app.zip#influx_data_cleaner_(macOS).zip" \
           "artifacts/linux/influx_data_cleaner#influx_data_cleaner_(Linux)"
-          

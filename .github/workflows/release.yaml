@@ -81,6 +81,10 @@ jobs:
         python3 -m pip install --upgrade pip
         pip3 install pyinstaller ttkbootstrap platformdirs influxdb darkdetect
 
+    - name: Debug Python Tcl/Tk version
+      run: |
+        python3 -c "import tkinter; print(tkinter.Tcl().eval('info patchlevel'))"
+
     - name: Debug Tcl/Tk environment
       run: |
         tclsh << 'EOF'
@@ -103,17 +107,13 @@ jobs:
           }
         EOF
 
-    - name: Set Tcl/Tk library path
+    - name: Set Tcl/Tk library path for Python
       run: |
-        MSG_CAT_FILE=$(find /usr -name "msgcat-1.6.1.tm" 2>/dev/null | grep "tcl8.6" | head -n 1)
-        if [ -n "$MSG_CAT_FILE" ]; then
-          export TCLLIBPATH=$(dirname "$MSG_CAT_FILE")
-          echo "TCLLIBPATH=$TCLLIBPATH" >> $GITHUB_ENV
-          echo "Set TCLLIBPATH to $TCLLIBPATH"
-        else
-          echo "msgcat-1.6.1.tm not found on system"
-          exit 1
-        fi
+        export TCL_LIBRARY=/usr/share/tcltk/tcl8.6
+        export TK_LIBRARY=/usr/share/tcltk/tk8.6
+        echo "TCL_LIBRARY=/usr/share/tcltk/tcl8.6" >> $GITHUB_ENV
+        echo "TK_LIBRARY=/usr/share/tcltk/tk8.6" >> $GITHUB_ENV
+        echo "Set TCL_LIBRARY to $TCL_LIBRARY and TK_LIBRARY to $TK_LIBRARY"
 
     - name: Build with PyInstaller
       run: |

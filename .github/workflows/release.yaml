@@ -89,10 +89,17 @@ jobs:
         pip install --upgrade pip
         pip install pyinstaller ttkbootstrap platformdirs influxdb darkdetect
 
+    - name: Set Tcl/Tk library paths
+      run: |
+        export TCL_LIBRARY=/usr/share/tcltk/tcl8.6
+        export TK_LIBRARY=/usr/share/tcltk/tk8.6
+        echo "TCL_LIBRARY=/usr/share/tcltk/tcl8.6" >> $GITHUB_ENV
+        echo "TK_LIBRARY=/usr/share/tcltk/tk8.6" >> $GITHUB_ENV
+
     - name: Build with PyInstaller in venv
       run: |
         . venv/bin/activate
-        pyinstaller --clean influx_data_cleaner.spec
+        pyinstaller --clean --log-level DEBUG influx_data_cleaner.spec
 
     - name: Debug PyInstaller logs
       run: |
@@ -155,8 +162,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         gh release create "${{ github.ref_name }}" \
-          --title "Release ${github.ref_name}" \
-          --notes "Release of Influx Data Cleaner v${github.ref_name}"
+          --title "Release ${{ github.ref_name }}" \
+          --notes "Release of Influx Data Cleaner v${{ github.ref_name }}"
         gh release upload "${{ github.ref_name }}" \
           "artifacts/windows/influx_data_cleaner.exe#influx_data_cleaner_(Windows).exe" \
           "artifacts/macos/influx_data_cleaner_app.zip#influx_data_cleaner_(macOS).zip" \

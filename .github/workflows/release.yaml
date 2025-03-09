@@ -60,7 +60,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: influx_data_cleaner-macos
-        path: dist/influx_data_cleaner
+        path: dist/influx_data_cleaner.app  # Updated to .app bundle
 
   build-linux:
     runs-on: ubuntu-latest
@@ -104,18 +104,22 @@ jobs:
       run: ls -R
       working-directory: artifacts
 
-    - name: Rename macOS and Linux artifacts for unique names
+    - name: Organize files into platform folders
       run: |
-        mv artifacts/influx_data_cleaner-macos/influx_data_cleaner artifacts/influx_data_cleaner-macos/influx_data_cleaner-macos
-        mv artifacts/influx_data_cleaner-linux/influx_data_cleaner artifacts/influx_data_cleaner-linux/influx_data_cleaner-linux
+        mkdir -p artifacts/windows
+        mkdir -p artifacts/macos
+        mkdir -p artifacts/linux
+        mv artifacts/influx_data_cleaner-windows/influx_data_cleaner.exe artifacts/windows/
+        mv artifacts/influx_data_cleaner-macos/influx_data_cleaner.app artifacts/macos/  # Updated to .app
+        mv artifacts/influx_data_cleaner-linux/influx_data_cleaner artifacts/linux/
 
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
         files: |
-          artifacts/influx_data_cleaner-windows/influx_data_cleaner.exe
-          artifacts/influx_data_cleaner-macos/influx_data_cleaner-macos
-          artifacts/influx_data_cleaner-linux/influx_data_cleaner-linux
+          artifacts/windows/influx_data_cleaner.exe
+          artifacts/macos/influx_data_cleaner.app
+          artifacts/linux/influx_data_cleaner
         tag_name: ${{ github.ref }}
         name: Release ${{ github.ref }}
         draft: false

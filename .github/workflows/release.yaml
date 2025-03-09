@@ -18,13 +18,12 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11'  # As confirmed, this version is fine
+        python-version: '3.11'
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install pyinstaller ttkbootstrap platformdirs influxdb darkdetect pywin32
-        # darkdetect is installed for Windows theme detection
 
     - name: Build with PyInstaller
       run: |
@@ -46,13 +45,12 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11'  # As confirmed, this version is fine
+        python-version: '3.11'
 
     - name: Install dependencies
       run: |
         python3 -m pip install --upgrade pip
         pip3 install pyinstaller ttkbootstrap platformdirs influxdb darkdetect
-        # darkdetect is installed for consistency in dependency management
 
     - name: Build with PyInstaller
       run: |
@@ -74,13 +72,12 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11'  # As confirmed, this version is fine
+        python-version: '3.11'
 
     - name: Install dependencies
       run: |
         python3 -m pip install --upgrade pip
         pip3 install pyinstaller ttkbootstrap platformdirs influxdb darkdetect
-        # darkdetect is installed for consistency in dependency management
 
     - name: Build with PyInstaller
       run: |
@@ -107,13 +104,18 @@ jobs:
       run: ls -R
       working-directory: artifacts
 
+    - name: Rename macOS and Linux artifacts for unique names
+      run: |
+        mv artifacts/influx_data_cleaner-macos/influx_data_cleaner artifacts/influx_data_cleaner-macos/influx_data_cleaner-macos
+        mv artifacts/influx_data_cleaner-linux/influx_data_cleaner artifacts/influx_data_cleaner-linux/influx_data_cleaner-linux
+
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
         files: |
           artifacts/influx_data_cleaner-windows/influx_data_cleaner.exe
-          artifacts/influx_data_cleaner-macos/influx_data_cleaner
-          artifacts/influx_data_cleaner-linux/influx_data_cleaner
+          artifacts/influx_data_cleaner-macos/influx_data_cleaner-macos
+          artifacts/influx_data_cleaner-linux/influx_data_cleaner-linux
         tag_name: ${{ github.ref }}
         name: Release ${{ github.ref }}
         draft: false

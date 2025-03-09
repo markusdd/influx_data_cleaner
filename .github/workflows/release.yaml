@@ -69,20 +69,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install system dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y python3 python3-pip python3-tk
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
 
-    - name: Install Python dependencies
+    - name: Build Docker image and run PyInstaller
       run: |
-        pip3 install --user --upgrade pip
-        pip3 install --user pyinstaller ttkbootstrap platformdirs influxdb darkdetect
-        echo "PATH=$HOME/.local/bin:$PATH" >> $GITHUB_ENV
-
-    - name: Build with PyInstaller
-      run: |
-        pyinstaller --clean --log-level DEBUG influx_data_cleaner.spec
+        docker build -t influx-data-cleaner-build .
+        docker run --rm -v $(pwd):/app influx-data-cleaner-build
 
     - name: Debug PyInstaller logs
       run: |

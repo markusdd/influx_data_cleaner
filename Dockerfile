@@ -1,4 +1,4 @@
-FROM fedora:40
+FROM fedora:35
 
 # Avoid interactive prompts during installation
 ENV DEBIAN_FRONTEND=noninteractive

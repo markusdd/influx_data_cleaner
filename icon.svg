@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="64"
+   height="64"
+   viewBox="0 0 64 64"
+   version="1.1"
+   id="svg5"
+   sodipodi:docname="icon.svg"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   inkscape:export-filename="icon.png"
+   inkscape:export-xdpi="384"
+   inkscape:export-ydpi="384"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs5" />
+  <sodipodi:namedview
+     id="namedview5"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="14.179688"
+     inkscape:cx="12.517906"
+     inkscape:cy="39.316804"
+     inkscape:window-width="3840"
+     inkscape:window-height="2054"
+     inkscape:window-x="-11"
+     inkscape:window-y="-11"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5" />
+  <!-- Solid white background -->
+  <!-- Watch face (circle) -->
+  <circle
+     cx="32"
+     cy="32"
+     r="26"
+     stroke="#26A69A"
+     stroke-width="4"
+     fill="none"
+     id="circle1" />
+  <!-- Watch strap (simplified flat lines, top and bottom) -->
+  <rect
+     x="24.658873"
+     y="1.5013242"
+     width="14.682257"
+     height="9.3517218"
+     fill="#26a69a"
+     id="rect2"
+     style="stroke-width:1.31008" />
+  <rect
+     x="24.658873"
+     y="53.047218"
+     width="14.682257"
+     height="9.5511913"
+     fill="#26a69a"
+     id="rect3"
+     style="stroke-width:1.32397" />
+  <!-- "I" (vertical line, left side) -->
+  <rect
+     x="15.622059"
+     y="22"
+     width="4"
+     height="20"
+     fill="#26a69a"
+     id="rect4" />
+  <!-- "X" (cross, centered) -->
+  <line
+     x1="22.336266"
+     y1="15.157513"
+     x2="41.905182"
+     y2="48.842487"
+     stroke="#26a69a"
+     stroke-width="6.6291"
+     id="line4" />
+  <line
+     x1="22.336266"
+     y1="48.842487"
+     x2="41.905182"
+     y2="15.157513"
+     stroke="#26a69a"
+     stroke-width="6.6291"
+     id="line5" />
+  <!-- "C" (curved line, right side, opening to the left, matching height) -->
+  <path
+     d="m 50.638483,23.295457 a 8.1985142,9.05716 0 0 0 0,18.11432"
+     stroke="#26a69a"
+     stroke-width="3.54032"
+     fill="none"
+     id="path5" />
+</svg>

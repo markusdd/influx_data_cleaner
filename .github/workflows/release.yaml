@@ -76,8 +76,9 @@ jobs:
 
     - name: Install Python dependencies
       run: |
-        sudo pip3 install --upgrade pip
-        sudo pip3 install pyinstaller ttkbootstrap platformdirs influxdb darkdetect
+        pip3 install --user --upgrade pip
+        pip3 install --user pyinstaller ttkbootstrap platformdirs influxdb darkdetect
+        echo "PATH=$HOME/.local/bin:$PATH" >> $GITHUB_ENV
 
     - name: Build with PyInstaller
       run: |

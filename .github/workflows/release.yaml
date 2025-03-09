@@ -74,12 +74,16 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Install dependencies and Tcl/Tk
+    - name: Install dependencies and Tcl/Tk with tcllib
       run: |
         sudo apt-get update
-        sudo apt-get install -y tcl8.6 tk8.6
+        sudo apt-get install -y tcl8.6 tk8.6 tcllib
         python3 -m pip install --upgrade pip
         pip3 install pyinstaller ttkbootstrap platformdirs influxdb darkdetect
+
+    - name: Verify Tcl/Tk msgcat availability
+      run: |
+        tclsh -c "package require msgcat; puts [package present msgcat]"
 
     - name: Build with PyInstaller
       run: |

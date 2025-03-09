@@ -140,6 +140,6 @@ jobs:
           --title "Release ${{ github.ref_name }}" \
           --notes "Release of Influx Data Cleaner v${{ github.ref_name }}"
         gh release upload "${{ github.ref_name }}" \
-          artifacts/windows/influx_data_cleaner.exe#influx_data_cleaner_(Windows).exe \
-          artifacts/macos/influx_data_cleaner_app.zip#influx_data_cleaner_(macOS).zip \
-          artifacts/linux/influx_data_cleaner#influx_data_cleaner_(Linux)
+          "artifacts/windows/influx_data_cleaner.exe#influx_data_cleaner_(Windows).exe" \
+          "artifacts/macos/influx_data_cleaner_app.zip#influx_data_cleaner_(macOS).zip" \
+          "artifacts/linux/influx_data_cleaner#influx_data_cleaner_(Linux)"

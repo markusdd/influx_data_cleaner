@@ -69,36 +69,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Add deadsnakes PPA and install Python 3.11
+    - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y software-properties-common
-        sudo add-apt-repository ppa:deadsnakes/ppa -y
-        sudo apt-get update
-        sudo apt-get install -y python3.11 python3.11-venv python3.11-dev python3.11-tk
+        sudo apt-get install -y python3 python3-pip python3-tk
 
-    - name: Create and activate virtual environment
+    - name: Install Python dependencies
       run: |
-        python3.11 -m venv venv
-        echo "VIRTUAL_ENV=$(pwd)/venv" >> $GITHUB_ENV
-        echo "PATH=$(pwd)/venv/bin:$PATH" >> $GITHUB_ENV
+        sudo pip3 install --upgrade pip
+        sudo pip3 install pyinstaller ttkbootstrap platformdirs influxdb darkdetect
 
-    - name: Install dependencies in venv
+    - name: Build with PyInstaller
       run: |
-        . venv/bin/activate
-        pip install --upgrade pip
-        pip install pyinstaller ttkbootstrap platformdirs influxdb darkdetect
-
-    - name: Set Tcl/Tk library paths
-      run: |
-        export TCL_LIBRARY=/usr/share/tcltk/tcl8.6
-        export TK_LIBRARY=/usr/share/tcltk/tk8.6
-        echo "TCL_LIBRARY=/usr/share/tcltk/tcl8.6" >> $GITHUB_ENV
-        echo "TK_LIBRARY=/usr/share/tcltk/tk8.6" >> $GITHUB_ENV
-
-    - name: Build with PyInstaller in venv
-      run: |
-        . venv/bin/activate
         pyinstaller --clean --log-level DEBUG influx_data_cleaner.spec
 
     - name: Debug PyInstaller logs

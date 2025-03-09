@@ -56,6 +56,12 @@ jobs:
       run: |
         pyinstaller --clean influx_data_cleaner.spec
 
+    - name: Debug app bundle structure after build
+      run: |
+        ls -R dist/influx_data_cleaner.app
+        cat dist/influx_data_cleaner.app/Contents/Info.plist
+      continue-on-error: true
+
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
@@ -107,9 +113,15 @@ jobs:
       run: ls -R
       working-directory: artifacts
 
-    - name: Debug macOS artifact structure
-      run: ls -R
-      working-directory: artifacts/influx_data_cleaner-macos
+    - name: Debug macOS artifact structure before zipping
+      run: |
+        ls -R artifacts/influx_data_cleaner-macos
+        find artifacts/influx_data_cleaner-macos -type f -ls
+      continue-on-error: true
+
+    - name: Fix app bundle permissions
+      run: |
+        chmod +x artifacts/influx_data_cleaner-macos/influx_data_cleaner.app/Contents/MacOS/influx_data_cleaner
 
     - name: Organize files into platform folders
       run: |

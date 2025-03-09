@@ -114,9 +114,8 @@ jobs:
         mkdir -p artifacts/macos
         mkdir -p artifacts/linux
         mv artifacts/influx_data_cleaner-windows/influx_data_cleaner.exe artifacts/windows/
-        mv artifacts/influx_data_cleaner-macos/influx_data_cleaner.app artifacts/macos/
+        mv artifacts/influx_data_cleaner-macos/ artifacts/macos/influx_data_cleaner.app
         mv artifacts/influx_data_cleaner-linux/influx_data_cleaner artifacts/linux/
-        chmod -R u+w artifacts/macos/influx_data_cleaner.app
 
     - name: Debug post-move structure
       run: ls -R

@@ -116,24 +116,30 @@ jobs:
         mv artifacts/influx_data_cleaner-windows/influx_data_cleaner.exe artifacts/windows/
         mv artifacts/influx_data_cleaner-macos/ artifacts/macos/influx_data_cleaner.app
         mv artifacts/influx_data_cleaner-linux/influx_data_cleaner artifacts/linux/
+        cd artifacts/macos
+        zip -r influx_data_cleaner_app.zip influx_data_cleaner.app
+        rm -rf influx_data_cleaner.app
 
     - name: Debug post-move structure
       run: ls -R
       working-directory: artifacts/macos
 
-    - name: Zip macOS app bundle
+    - name: Install GitHub CLI
       run: |
-        cd artifacts/macos
-        zip -r influx_data_cleaner_app.zip influx_data_cleaner.app
+        sudo apt-get update
+        sudo apt-get install -y gh
 
-    - name: Create Release
-      uses: softprops/action-gh-release@v2
-      with:
-        files: |
-          artifacts/windows/influx_data_cleaner.exe
-          artifacts/macos/influx_data_cleaner_app.zip
-          artifacts/linux/influx_data_cleaner
-        tag_name: ${{ github.ref }}
-        name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
+    - name: Create Release and Upload Assets
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Create the release
+        gh release create "${{ github.ref_name }}" \
+          --title "Release ${{ github.ref_name }}" \
+          --notes "Release of Influx Data Cleaner v${{ github.ref_name }}"
+
+        # Upload assets with custom names
+        gh release upload "${{ github.ref_name }}" \
+          artifacts/windows/influx_data_cleaner.exe#influx_data_cleaner_(Windows).exe \
+          artifacts/macos/influx_data_cleaner_app.zip#influx_data_cleaner_(macOS).zip \
+          artifacts/linux/influx_data_cleaner#influx_data_cleaner_(Linux)

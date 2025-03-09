@@ -60,7 +60,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: influx_data_cleaner-macos
-        path: dist/influx_data_cleaner.app  # Updated to .app bundle
+        path: dist/influx_data_cleaner.app  # Uploads the entire .app directory
 
   build-linux:
     runs-on: ubuntu-latest
@@ -110,7 +110,7 @@ jobs:
         mkdir -p artifacts/macos
         mkdir -p artifacts/linux
         mv artifacts/influx_data_cleaner-windows/influx_data_cleaner.exe artifacts/windows/
-        mv artifacts/influx_data_cleaner-macos/influx_data_cleaner.app artifacts/macos/  # Updated to .app
+        mv artifacts/influx_data_cleaner-macos/influx_data_cleaner.app artifacts/macos/influx_data_cleaner.app  # Move the .app directory
         mv artifacts/influx_data_cleaner-linux/influx_data_cleaner artifacts/linux/
 
     - name: Create Release

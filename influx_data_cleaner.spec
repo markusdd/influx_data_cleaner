@@ -6,7 +6,7 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[("app_icon.png", "."), ("logo_large.png", ".")],
-    hiddenimports=["platformdirs", "ttkbootstrap", "darkdetect"],
+    hiddenimports=["platformdirs", "ttkbootstrap", "darkdetect", "tcl.msgcat"],  # Added tcl.msgcat
     hookspath=[],
     runtime_hooks=[],
     excludes=[],
@@ -24,22 +24,21 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name="influx_data_cleaner",  # Base name for all platforms
+    name="influx_data_cleaner",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
     upx_exclude=[],
     runtime_tmpdir=None,
-    console=False,  # Ensures windowed app and .app bundle on macOS
-    icon="logo_large.png"  # PNG icon for all platforms; PyInstaller handles conversion
+    console=False,
+    icon="logo_large.png"
 )
 
-# Create macOS application bundle
 if platform.system().lower() == "darwin":
     app = BUNDLE(
         exe,
         name="influx_data_cleaner.app",
-        icon="logo_large.png",  # Use PNG directly for macOS bundle
-        bundle_identifier="com.markusdd.influxdatacleaner"  # Optional: Add a unique bundle identifier
+        icon="logo_large.png",
+        bundle_identifier="com.markusdd.influxdatacleaner"
     )

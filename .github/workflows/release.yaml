@@ -121,12 +121,17 @@ jobs:
       run: ls -R
       working-directory: artifacts/macos
 
+    - name: Zip macOS app bundle
+      run: |
+        cd artifacts/macos
+        zip -r influx_data_cleaner_app.zip influx_data_cleaner.app
+
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
         files: |
           artifacts/windows/influx_data_cleaner.exe
-          artifacts/macos/influx_data_cleaner.app/
+          artifacts/macos/influx_data_cleaner_app.zip
           artifacts/linux/influx_data_cleaner
         tag_name: ${{ github.ref }}
         name: Release ${{ github.ref }}

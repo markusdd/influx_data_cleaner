@@ -94,6 +94,13 @@ jobs:
         . venv/bin/activate
         pyinstaller --clean influx_data_cleaner.spec
 
+    - name: Debug PyInstaller logs
+      run: |
+        cat build/influx_data_cleaner/warn-influx_data_cleaner.txt
+        cat build/influx_data_cleaner/influx_data_cleaner.out
+      working-directory: .
+      continue-on-error: true
+
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:

@@ -60,7 +60,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: influx_data_cleaner-macos
-        path: dist/influx_data_cleaner.app  # Ensure this is the correct path
+        path: dist/influx_data_cleaner.app  # Uploads the entire .app directory
 
   build-linux:
     runs-on: ubuntu-latest
@@ -114,7 +114,7 @@ jobs:
         mkdir -p artifacts/macos
         mkdir -p artifacts/linux
         mv artifacts/influx_data_cleaner-windows/influx_data_cleaner.exe artifacts/windows/
-        mv artifacts/influx_data_cleaner-macos/. artifacts/macos/influx_data_cleaner.app  # Move the entire contents, ensuring .app structure
+        mv artifacts/influx_data_cleaner-macos artifacts/macos/influx_data_cleaner.app 
         mv artifacts/influx_data_cleaner-linux/influx_data_cleaner artifacts/linux/
 
     - name: Debug post-move structure

@@ -107,7 +107,7 @@ jobs:
           }
         EOF
 
-    - name: Set Tcl/Tk library path for Python
+    - name: Set Tcl/Tk library paths
       run: |
         export TCL_LIBRARY=/usr/share/tcltk/tcl8.6
         export TK_LIBRARY=/usr/share/tcltk/tk8.6
@@ -117,6 +117,9 @@ jobs:
 
     - name: Build with PyInstaller
       run: |
+        # Ensure PyInstaller uses the correct Tcl/Tk paths
+        export TCL_LIBRARY=/usr/share/tcltk/tcl8.6
+        export TK_LIBRARY=/usr/share/tcltk/tk8.6
         pyinstaller --clean influx_data_cleaner.spec
 
     - name: Display PyInstaller log
@@ -186,3 +189,4 @@ jobs:
           "artifacts/windows/influx_data_cleaner.exe#influx_data_cleaner_(Windows).exe" \
           "artifacts/macos/influx_data_cleaner_app.zip#influx_data_cleaner_(macOS).zip" \
           "artifacts/linux/influx_data_cleaner#influx_data_cleaner_(Linux)"
+          

@@ -1,14 +1,14 @@
-FROM ubuntu:22.04
+FROM fedora:40
 
 # Avoid interactive prompts during installation
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install system dependencies including Python and Tcl/Tk
-RUN apt-get update && apt-get install -y \
+RUN dnf install -y \
     python3 \
     python3-pip \
-    python3-tk \
-    && rm -rf /var/lib/apt/lists/*
+    python3-tkinter \
+    && dnf clean all
 
 # Set working directory
 WORKDIR /app

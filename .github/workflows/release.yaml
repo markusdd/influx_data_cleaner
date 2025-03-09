@@ -144,3 +144,4 @@ jobs:
           "artifacts/windows/influx_data_cleaner.exe#influx_data_cleaner_(Windows).exe" \
           "artifacts/macos/influx_data_cleaner_app.zip#influx_data_cleaner_(macOS).zip" \
           "artifacts/linux/influx_data_cleaner#influx_data_cleaner_(Linux)"
+          

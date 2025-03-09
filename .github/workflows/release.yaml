@@ -69,17 +69,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Download prebuilt Python 3.11
+    - name: Add deadsnakes PPA and install Python 3.11
       run: |
-        PYTHON_VERSION=3.11.9
-        curl -O https://www.python.org/ftp/python/$PYTHON_VERSION/Python-$PYTHON_VERSION-amd64.tar.xz
-        tar -xvf Python-$PYTHON_VERSION-amd64.tar.xz
-        sudo mv Python-$PYTHON_VERSION-amd64 /usr/local/bin/python3.11
-        rm Python-$PYTHON_VERSION-amd64.tar.xz
+        sudo apt-get update
+        sudo apt-get install -y software-properties-common
+        sudo add-apt-repository ppa:deadsnakes/ppa -y
+        sudo apt-get update
+        sudo apt-get install -y python3.11 python3.11-venv python3.11-dev python3.11-tk
 
     - name: Create and activate virtual environment
       run: |
-        /usr/local/bin/python3.11 -m venv venv
+        python3.11 -m venv venv
         echo "VIRTUAL_ENV=$(pwd)/venv" >> $GITHUB_ENV
         echo "PATH=$(pwd)/venv/bin:$PATH" >> $GITHUB_ENV
 

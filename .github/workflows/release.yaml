@@ -60,7 +60,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: influx_data_cleaner-macos
-        path: dist/influx_data_cleaner.app  # Uploads the entire .app directory
+        path: dist/influx_data_cleaner.app  # Ensure this is the correct path
 
   build-linux:
     runs-on: ubuntu-latest
@@ -103,6 +103,10 @@ jobs:
     - name: Display structure of downloaded files
       run: ls -R
       working-directory: artifacts
+
+    - name: Debug macOS artifact structure
+      run: ls -R
+      working-directory: artifacts/influx_data_cleaner-macos
 
     - name: Organize files into platform folders
       run: |

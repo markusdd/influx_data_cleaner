@@ -74,60 +74,28 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Install dependencies and Tcl/Tk with tcllib
+    - name: Install system dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y tcl8.6 tk8.6 tcllib
-        python3 -m pip install --upgrade pip
-        pip3 install pyinstaller ttkbootstrap platformdirs influxdb darkdetect
+        sudo apt-get install -y python3-tk
 
-    - name: Debug Python Tcl/Tk version
+    - name: Create and activate virtual environment
       run: |
-        python3 -c "import tkinter; print(tkinter.Tcl().eval('info patchlevel'))"
+        python3 -m venv venv
+        . venv/bin/activate
+        echo "VIRTUAL_ENV=$(pwd)/venv" >> $GITHUB_ENV
+        echo "PATH=$(pwd)/venv/bin:$PATH" >> $GITHUB_ENV
 
-    - name: Debug Tcl/Tk environment
+    - name: Install dependencies in venv
       run: |
-        tclsh << 'EOF'
-          puts [info tclversion]
-          puts $tcl_library
-          puts $auto_path
-        EOF
-        find /usr -name "msgcat*" 2>/dev/null
+        . venv/bin/activate
+        pip install --upgrade pip
+        pip install pyinstaller ttkbootstrap platformdirs influxdb darkdetect
 
-    - name: Verify Tcl/Tk msgcat availability
+    - name: Build with PyInstaller in venv
       run: |
-        tclsh << 'EOF'
-          catch {
-            package require msgcat
-            puts [package present msgcat]
-          } result
-          if {$result != ""} {
-            puts stderr "Error loading msgcat: $result"
-            exit 1
-          }
-        EOF
-
-    - name: Set Tcl/Tk library paths
-      run: |
-        export TCL_LIBRARY=/usr/share/tcltk/tcl8.6
-        export TK_LIBRARY=/usr/share/tcltk/tk8.6
-        echo "TCL_LIBRARY=/usr/share/tcltk/tcl8.6" >> $GITHUB_ENV
-        echo "TK_LIBRARY=/usr/share/tcltk/tk8.6" >> $GITHUB_ENV
-        echo "Set TCL_LIBRARY to $TCL_LIBRARY and TK_LIBRARY to $TK_LIBRARY"
-
-    - name: Build with PyInstaller
-      run: |
-        # Ensure PyInstaller uses the correct Tcl/Tk paths
-        export TCL_LIBRARY=/usr/share/tcltk/tcl8.6
-        export TK_LIBRARY=/usr/share/tcltk/tk8.6
+        . venv/bin/activate
         pyinstaller --clean influx_data_cleaner.spec
-
-    - name: Display PyInstaller log
-      run: |
-        cat build/influx_data_cleaner/warn-influx_data_cleaner.txt
-        cat build/influx_data_cleaner/influx_data_cleaner.out
-      working-directory: .
-      continue-on-error: true
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
@@ -189,4 +157,3 @@ jobs:
           "artifacts/windows/influx_data_cleaner.exe#influx_data_cleaner_(Windows).exe" \
           "artifacts/macos/influx_data_cleaner_app.zip#influx_data_cleaner_(macOS).zip" \
           "artifacts/linux/influx_data_cleaner#influx_data_cleaner_(Linux)"
-          

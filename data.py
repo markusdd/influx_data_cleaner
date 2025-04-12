@@ -31,6 +31,8 @@ class DataManager:
         result = self.client.query(query)
 
         anomalies_list = []
+        last_flagged_idx = -2  # Track the index of the last flagged anomaly to avoid consecutive flagging
+
         for p in result:
             points = list(p)
             for idx, e in enumerate(points):
@@ -61,24 +63,54 @@ class DataManager:
                         )
 
                 if check_type == "bounds":
-                    if idx > 0 and not (min_val <= e["value"] <= max_val):
+                    if not (min_val <= e["value"] <= max_val):
                         anomalies_list.append(anomaly_data)
+                        last_flagged_idx = idx
                 else:  # monotonicity
-                    if idx >= context_size and idx < len(points) - context_size:
-                        context_values = (
-                            [p[1] for p in anomaly_data["context_before"][::-1]]
-                            + [e["value"]]
-                            + [p[1] for p in anomaly_data["context_after"]]
-                        )
-                        before_vals = context_values[:context_size]
-                        after_vals = context_values[context_size + 1 :]
+                    if idx > 0 and idx < len(points) - 1:  # Ensure prev and next exist
                         curr_val = e["value"]
-                        if (before_vals and curr_val < max(before_vals)) or (
-                            after_vals
-                            and curr_val > min(after_vals)
-                            and any(v < curr_val for v in after_vals)
-                        ):
+                        prev_val = anomaly_data["prev_value"]
+                        next_val = anomaly_data["next_value"]
+                        before_vals = [p[1] for p in anomaly_data["context_before"][::-1]]
+                        after_vals = [p[1] for p in anomaly_data["context_after"]]
+
+                        # Skip if no context to establish trend
+                        if not before_vals or not after_vals:
+                            continue
+
+                        # Establish trend boundaries from context
+                        max_before = max(before_vals)
+                        min_before = min(before_vals)
+                        max_after = max(after_vals)
+                        min_after = min(after_vals)
+
+                        # Detect isolated peaks and dips using full context
+                        is_peak = curr_val > prev_val and curr_val > next_val
+                        is_dip = curr_val < prev_val and curr_val < next_val
+
+                        # Flag as anomaly if it's a dip or a significant peak
+                        should_flag = False
+                        if is_dip:
+                            # Flag dips that are below the trend
+                            if curr_val < max_before and curr_val < min_after:
+                                # Avoid flagging if this is a correction after a peak
+                                if idx != last_flagged_idx + 1:  # Not immediately after a flagged anomaly
+                                    should_flag = True
+                                elif curr_val >= min_before:  # Aligns with pre-anomaly trend
+                                    should_flag = False
+                                else:
+                                    should_flag = True  # Flag if it's a new dip below the trend
+                        elif is_peak:
+                            # Flag peaks that are above both the trend before and after
+                            if curr_val > max_before and curr_val > max_after:
+                                if idx != last_flagged_idx + 1:  # Not immediately after a flagged anomaly
+                                    should_flag = True
+                                elif curr_val > max(before_vals[:-1] if len(before_vals) > 1 else before_vals):  # Still above pre-anomaly trend
+                                    should_flag = True
+
+                        if should_flag:
                             anomalies_list.append(anomaly_data)
+                            last_flagged_idx = idx
 
         self.anomalies = anomalies_list
         return anomalies_list
@@ -146,6 +178,7 @@ class DataManager:
                     "fields": {"value": fix_value},
                 }
             ]
+            print(json_body)
             result = self.client.write_points(json_body)
             if result:
                 anomaly["value"] = fix_value  # Update in memory
